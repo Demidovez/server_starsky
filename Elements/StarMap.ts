@@ -7,8 +7,6 @@ export class StarMap {
   height: number;
   width: number;
   border: { color: string; width: number; image: any };
-  innerShadow: { color: string; height: number };
-  outsideShadow: { color: string; height: number };
   margin: number;
   x: number;
   y: number;
@@ -18,33 +16,31 @@ export class StarMap {
     width = 100,
     height = 100,
     border = { color: "gray", width: 5, image: null },
-    innerShadow = { color: "black", height: 10 },
-    outsideShadow = { color: "black", height: 10 },
     margin = 50
   ) {
     this.shape = shape;
     this.width = width;
     this.height = height;
     this.border = border;
-    this.innerShadow = innerShadow;
-    this.outsideShadow = outsideShadow;
     this.margin = margin;
 
     this.x = 0;
     this.y = 0;
   }
 
-  draw(ctx: NodeCanvasRenderingContext2D, sheet: Sheet, border: Border) {
+  draw(
+    ctx: NodeCanvasRenderingContext2D,
+    sheet: Sheet,
+    prevElemPositionY: number
+  ) {
     this.x = sheet.size.width / 2;
     this.y =
-      border.margin +
-      border.width +
-      this.margin +
-      this.border.width +
-      this.height / 2;
+      prevElemPositionY + this.margin + this.border.width + this.height / 2;
     const radius = this.width / 2;
     const startAngle = 0;
     const endAngle = 2 * Math.PI;
+
+    ctx.strokeStyle = "#000000";
 
     // Рисуем подложку с выступом (для рамки)
     ctx.beginPath();

@@ -12,5 +12,8 @@ export class Sheet {
     this.image = image;
   }
 
-  draw(ctx: NodeCanvasRenderingContext2D) {}
+  draw(ctx: NodeCanvasRenderingContext2D) {
+    ctx.fillStyle = this.backgroundColor;
+    ctx.fillRect(0, 0, this.size.width, this.size.height);
+  }
 }

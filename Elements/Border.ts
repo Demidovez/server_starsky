@@ -21,6 +21,7 @@ export class Border {
     const height = sheet.size.height - 2 * this.margin;
 
     ctx.lineWidth = this.width;
+    ctx.strokeStyle = this.color;
     ctx.strokeRect(x, y, width, height);
   }
 }

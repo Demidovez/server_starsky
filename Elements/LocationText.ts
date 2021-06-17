@@ -1,9 +1,8 @@
 import { NodeCanvasRenderingContext2D } from "canvas";
 import { Border } from "./Border";
 import { Sheet } from "./Sheet";
-import { StarMap } from "./StarMap";
 
-export class Description {
+export class LocationText {
   fontFamily: string;
   color: string;
   size: number;
@@ -67,8 +66,8 @@ export class Description {
     prevElemPositionY: number
   ) {
     const x = sheet.size.width / 2;
-    const y = prevElemPositionY + this.size / 2;
-    const width = sheet.size.width - this.margin * 2;
+    const y = sheet.size.height - prevElemPositionY - this.margin;
+    const width = sheet.size.width - prevElemPositionY - this.margin * 2;
 
     ctx.font = this.size + "px " + this.fontFamily;
     ctx.textAlign = this.align;
