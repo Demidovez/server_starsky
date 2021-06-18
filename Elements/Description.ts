@@ -1,4 +1,5 @@
 import { NodeCanvasRenderingContext2D } from "canvas";
+import { Position } from "../types";
 import { Border } from "./Border";
 import { Sheet } from "./Sheet";
 import { StarMap } from "./StarMap";
@@ -7,10 +8,14 @@ export class Description {
   fontFamily: string;
   color: string;
   size: number;
+  width: number;
+  heigth: number;
   align: CanvasTextAlign;
   margin: number;
   text: string;
-  bottomPositionY: number;
+  position: number;
+  x: number;
+  y: number;
 
   constructor(
     fontFamily = "Verdana",
@@ -18,7 +23,8 @@ export class Description {
     size = 16,
     align = "center" as CanvasTextAlign,
     margin = 50,
-    text = "Здесь будет Ваш текст"
+    text = "Здесь будет Ваш текст",
+    position = 100
   ) {
     this.fontFamily = fontFamily;
     this.color = color;
@@ -26,8 +32,21 @@ export class Description {
     this.align = align;
     this.margin = margin;
     this.text = text;
+    this.position = position;
 
-    this.bottomPositionY = 0;
+    this.width = 0;
+    this.heigth = 0;
+    this.x = 0;
+    this.y = 0;
+  }
+
+  getPosition(): Position {
+    return {
+      width: this.width,
+      height: this.heigth,
+      x: this.x,
+      y: this.y - this.size,
+    };
   }
 
   _wrapText(
@@ -58,21 +77,25 @@ export class Description {
 
     ctx.fillText(line, x, totalY);
 
-    this.bottomPositionY = totalY;
+    this.heigth = totalY - this.y + this.size;
   }
 
   draw(
     ctx: NodeCanvasRenderingContext2D,
     sheet: Sheet,
-    prevElemPositionY: number
+    parentPosition: Position
   ) {
-    const x = sheet.size.width / 2;
-    const y = prevElemPositionY + this.size / 2;
-    const width = sheet.size.width - this.margin * 2;
+    this.x = sheet.size.width / 2;
+    this.y = parentPosition.y + parentPosition.height + this.size + this.margin;
+    this.width = sheet.size.width - this.margin * 2;
+
+    // console.log(parentPosition);
+    // ctx.moveTo(this.x, this.y);
+    // ctx.lineTo(this.x + 400, this.y);
 
     ctx.font = this.size + "px " + this.fontFamily;
     ctx.textAlign = this.align;
 
-    this._wrapText(ctx, this.text, x, y, width, this.size * 1.3);
+    this._wrapText(ctx, this.text, this.x, this.y, this.width, this.size * 1.3);
   }
 }

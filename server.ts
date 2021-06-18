@@ -20,6 +20,7 @@ app.get("/classic", (req, res) => {
       shape: "circle",
       borderColor: "gray",
       index: 0,
+      position: null,
     },
     description: {
       fontFamily: "Verdana",
@@ -27,10 +28,12 @@ app.get("/classic", (req, res) => {
       align: "center" as CanvasTextAlign,
       text: "День, когда все sdfsf sdf sdf sd fsdfdddd остановилось...",
       index: 1,
+      position: null,
     },
     separator: {
       color: "#000000",
       index: 2,
+      position: null,
     },
     location: {
       fontFamily: "Verdana",
@@ -38,6 +41,7 @@ app.get("/classic", (req, res) => {
       align: "center" as CanvasTextAlign,
       text: "Москва, 2021",
       index: 3,
+      position: null,
     },
   };
 

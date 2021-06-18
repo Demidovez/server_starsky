@@ -1,5 +1,6 @@
 import { NodeCanvasRenderingContext2D } from "canvas";
 import { DEFAULT_SIZE } from "../constants/Constants";
+import { Position } from "../types";
 import { Border } from "./Border";
 import { Sheet } from "./Sheet";
 
@@ -8,32 +9,46 @@ export class Separator {
   margin: number;
   backgroundColor: string;
   image: any;
+  position: number;
+  x: number;
+  y: number;
 
   constructor(
     size = DEFAULT_SIZE,
     margin = 30,
     backgroundColor = "#000000",
-    image = null
+    image = null,
+    position = 100
   ) {
     this.size = size;
     this.margin = margin;
     this.backgroundColor = backgroundColor;
     this.image = image;
+    this.position = position;
+
+    this.x = 0;
+    this.y = 0;
+  }
+
+  getPosition(): Position {
+    return {
+      width: this.size.width,
+      height: this.size.height,
+      x: this.x,
+      y: this.y,
+    };
   }
 
   draw(
     ctx: NodeCanvasRenderingContext2D,
     sheet: Sheet,
-    prevElemPositionY: number
+    parentPosition: Position
   ) {
-    ctx.moveTo(
-      (sheet.size.width - this.size.width) / 2,
-      prevElemPositionY + this.margin
-    );
-    ctx.lineTo(
-      (sheet.size.width - this.size.width) / 2 + this.size.width,
-      prevElemPositionY + this.margin
-    );
+    this.x = (sheet.size.width - this.size.width) / 2;
+    this.y = parentPosition.y + parentPosition.height + this.margin;
+
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(this.x + this.size.width, this.y);
     ctx.stroke();
   }
 }

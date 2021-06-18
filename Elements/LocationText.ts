@@ -1,4 +1,5 @@
 import { NodeCanvasRenderingContext2D } from "canvas";
+import { Position } from "../types";
 import { Border } from "./Border";
 import { Sheet } from "./Sheet";
 
@@ -9,7 +10,11 @@ export class LocationText {
   align: CanvasTextAlign;
   margin: number;
   text: string;
-  bottomPositionY: number;
+  position: number;
+  width: number;
+  heigth: number;
+  x: number;
+  y: number;
 
   constructor(
     fontFamily = "Verdana",
@@ -17,7 +22,8 @@ export class LocationText {
     size = 16,
     align = "center" as CanvasTextAlign,
     margin = 50,
-    text = "Здесь будет Ваш текст"
+    text = "Здесь будет Ваш текст",
+    position = 100
   ) {
     this.fontFamily = fontFamily;
     this.color = color;
@@ -25,8 +31,21 @@ export class LocationText {
     this.align = align;
     this.margin = margin;
     this.text = text;
+    this.position = position;
 
-    this.bottomPositionY = 0;
+    this.width = 0;
+    this.heigth = 0;
+    this.x = 0;
+    this.y = 0;
+  }
+
+  getPosition(): Position {
+    return {
+      width: this.width,
+      height: this.heigth,
+      x: this.x,
+      y: this.y - this.size,
+    };
   }
 
   _wrapText(
@@ -57,21 +76,21 @@ export class LocationText {
 
     ctx.fillText(line, x, totalY);
 
-    this.bottomPositionY = totalY;
+    this.heigth = totalY - this.size;
   }
 
   draw(
     ctx: NodeCanvasRenderingContext2D,
     sheet: Sheet,
-    prevElemPositionY: number
+    parentPosition: Position
   ) {
-    const x = sheet.size.width / 2;
-    const y = sheet.size.height - prevElemPositionY - this.margin;
-    const width = sheet.size.width - prevElemPositionY - this.margin * 2;
+    this.x = sheet.size.width / 2;
+    this.y = parentPosition.y + parentPosition.height + this.margin;
+    this.width = sheet.size.width - this.margin * 2;
 
     ctx.font = this.size + "px " + this.fontFamily;
     ctx.textAlign = this.align;
 
-    this._wrapText(ctx, this.text, x, y, width, this.size * 1.3);
+    this._wrapText(ctx, this.text, this.x, this.y, this.width, this.size * 1.3);
   }
 }
